@@ -9,6 +9,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -29,8 +30,8 @@ import javax.sql.StatementEventListener;
 
 public final class ConnectionPool {
 	
-	private BlockingQueue<Connection> connectionQueue;
-	private BlockingQueue<Connection> givenAwayConQueue;
+	private BlockingQueue<Connection> connectionQueue; // очередь свободных соединений
+	private BlockingQueue<Connection> givenAwayConQueue; // очередь отданных  соединений
 
 	
 	private String driverName;
@@ -39,7 +40,7 @@ public final class ConnectionPool {
 	private String password;
 	private int poolSize;
 	
-	private ConnectionPool() {
+	private ConnectionPool() {	    
 		DBResourceManager dbResourceManager = DBResourceManager.getInstance();
 		this.driverName=dbResourceManager.getValue(DBParameter.DB_DRIVER);
 		this.url=dbResourceManager.getValue(DBParameter.DB_URL);
@@ -107,6 +108,31 @@ public final class ConnectionPool {
 		}
 		return connection;
 	}
+	
+	public void closeConnection(Connection con, Statement st, ResultSet rs) {
+		try {
+			con.close();
+			
+		}catch (SQLException e) {
+			// logger.log(Level.Error, "Connection isn`t return to the pool."
+		}
+		
+		try {
+			rs.close();
+		}catch (SQLException e) {
+			//logger.log(Level.ERROR, "ResultSet isn`t closed"
+		}
+		
+		try {
+			st.close();
+		}catch (SQLException e) {
+			// logger.log(Level.Error. "Statement isn't closed."
+		}
+			
+			
+			
+		}
+	
 	
 	
 	public void closeConnection(Connection con, Statement st) {

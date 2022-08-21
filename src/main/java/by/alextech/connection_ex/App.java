@@ -15,7 +15,7 @@ public class App{
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		
-		Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/connection_pool?useSSL=false","root", "g145101988Q");
+		Connection con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/connectio_pool?useSSL=false","root", "g145101988Q");
 //
 		String sql = "INSERT INTO users(name,surname) VALUES(?,?)";
 		PreparedStatement ps = con.prepareStatement(sql);
